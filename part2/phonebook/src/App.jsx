@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import NumberList from './components/NumberList'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import personService from './services/persons'
+import Person from './components/Person'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -46,31 +46,46 @@ const App = () => {
   
   const addPerson = (event) => {
     event.preventDefault()
-    const recopilation = persons.map((person) => {
-      return person.name.toLowerCase()
-    })
 
-    if (recopilation.includes(newName.toLowerCase())) {
-      alert(`${newName} ya esta registrado.`);
-    } else {
+    const person = persons.find(p => p.name.toLowerCase() === newName.toLowerCase())
+    if (person === undefined) {
       const newPerson = {name:newName, number:newNumber}
       personService
       .create(newPerson)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
+        setNewNumber('')
       })
+    } else {
+      if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const updatedPerson = {...person, number: newNumber}
+        updateNumber(person.id, updatedPerson)
+      } 
     }
   }
 
-  const deletePerson = (id) => {
+  const updateNumber = (id, updatedPerson) => {
     personService
-    .del(id)
+    .update(id, updatedPerson)
     .then(returnedPerson => {
-      console.log(returnedPerson)
+      setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
     })
-    
   }
+
+  const deletePerson = (person) => {
+    personService
+    .del(person.id)
+    .then(setPersons(persons.filter(p => p.id !== person.id)))
+  }
+
+  const confirmation = (person) => {
+    if (window.confirm(`Do you really want to delete to ${person.name}?`)) {
+      deletePerson(person)
+    } 
+  }
+
+
 
   return (
     <div>
@@ -82,9 +97,14 @@ const App = () => {
       <PersonForm nameValue={newName} nameOnChange={handleNameChange} numberValue={newNumber} numberOnChange={handleNumberChange} onClick={addPerson} /> 
 
       <h2>Numbers</h2>
-      
-      <NumberList persons={persons} onClick={deletePerson}/>
-    
+        <ul>
+        {
+        persons.map(person => (
+          <Person key={person.name} person={person} confirmation={() => confirmation(person)}/>
+        ) 
+          
+        )}
+        </ul>
     </div>
   )
 }
