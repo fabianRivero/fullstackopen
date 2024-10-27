@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import personService from './services/persons'
 import Person from './components/Person'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,6 +11,8 @@ const App = () => {
   const [nameSearcher, setNameSearcher] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [confirmationMessage, setConfirmationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -54,6 +57,12 @@ const App = () => {
       .create(newPerson)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setConfirmationMessage(
+          `'${newName}' added to phonebook`
+        )
+        setTimeout(() => {
+          setConfirmationMessage(null)
+        }, 5000)
         setNewName('')
         setNewNumber('')
       })
@@ -61,6 +70,14 @@ const App = () => {
       if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
         const updatedPerson = {...person, number: newNumber}
         updateNumber(person.id, updatedPerson)
+        setConfirmationMessage(
+          `'${person.name}' updated`
+        )
+        setTimeout(() => {
+          setConfirmationMessage(null)
+        }, 5000)
+        setNewName('')
+        setNewNumber('')
       } 
     }
   }
@@ -77,6 +94,15 @@ const App = () => {
     personService
     .del(person.id)
     .then(setPersons(persons.filter(p => p.id !== person.id)))
+    .catch(error => {
+      setErrorMessage(
+        `Information of '${person.name}' was already removed from server`
+      )
+      setPersons(persons.filter(p => p.id !== person.id))
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    })
   }
 
   const confirmation = (person) => {
@@ -90,6 +116,8 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification confirmationMessage={confirmationMessage} errorMessage={errorMessage} />
+
       <Filter persons={filterResults} value={nameSearcher} onChange={handlePersonSearcher} onClick={searchPerson} />
       
       <h2>add a new</h2>
@@ -100,10 +128,9 @@ const App = () => {
         <ul>
         {
         persons.map(person => (
-          <Person key={person.name} person={person} confirmation={() => confirmation(person)}/>
-        ) 
-          
-        )}
+          <Person key={person.id} person={person} confirmation={() => confirmation(person)}/>
+        ))
+        }
         </ul>
     </div>
   )
