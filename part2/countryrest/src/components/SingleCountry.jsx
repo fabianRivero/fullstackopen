@@ -1,3 +1,5 @@
+import CountryWeather from "./CountryWeather"
+
 const SingleCountry = ({ cn }) => {
 
     return(
@@ -38,11 +40,11 @@ const SingleCountry = ({ cn }) => {
             cn.flags.png :
             'informacion inexistente'
         }
-         alt="" />
+         alt="country flag" />
+
+        <CountryWeather cn={cn}/>
         </div>        
     )
 }
-
-
 
 export default SingleCountry
