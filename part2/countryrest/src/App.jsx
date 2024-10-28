@@ -36,7 +36,7 @@ function App() {
 
       setShowList(false)
       setShowMessage(true)
-      setMessage("La lista esta vacia")
+      setMessage("the list is empty")
 
     } else if (option <= 10 && option > 1) {
 
@@ -54,13 +54,13 @@ function App() {
 
       setShowList(false)
       setShowMessage(true)
-      setMessage("Hay demasiados paises coincidentes")
+      setMessage("Too many matches, specify another filter")
 
     } else if (option === allCountries.length) {
 
       setShowList(false)
       setShowMessage(true)
-      setMessage("La lista esta vacia")
+      setMessage("the list is empty")
 
     }
   }, [countrySearch, allCountries]);
@@ -78,7 +78,7 @@ function App() {
   return (
     <>
       <div>
-        Buscar paises <input type="search" value={countrySearch} onChange={handlePersonSearcher} />
+        find countries <input type="search" value={countrySearch} onChange={handlePersonSearcher} />
       </div>
       <div>
         {

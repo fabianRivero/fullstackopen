@@ -10,7 +10,7 @@ const SingleCountry = ({ cn }) => {
             {
             cn.capital ?
             cn.capital[0] :
-            'informacion inexistente'
+            'non-existent information'
             }
         </p>
 
@@ -18,7 +18,7 @@ const SingleCountry = ({ cn }) => {
             {
             cn.area ?
             cn.area :
-            'informacion inexistente'
+            'non-existent information'
             }
         </p>
 
@@ -31,14 +31,14 @@ const SingleCountry = ({ cn }) => {
                     <li key={language}>{language}</li>
                 ))
                 :
-                'informacion inexistente'
+                'non-existent information'
             }
         </ul>
         <img src=
         {
             cn.flags.png ?
             cn.flags.png :
-            'informacion inexistente'
+            'non-existent information'
         }
          alt="country flag" />
 
