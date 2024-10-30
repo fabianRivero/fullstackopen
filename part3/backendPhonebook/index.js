@@ -3,18 +3,6 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const app = express()
 
-// const requestLogger = (request, response, next) => {
-//     console.log('Method:', request.method)
-//     console.log('Path:  ', request.path)
-//     console.log('Body:  ', request.body)
-//     console.log('---')
-//     next()
-//   }
-
-// const unknownEndpoint = (request, response) => {
-// response.status(404).send({ error: 'unknown endpoint' })
-// }
-
 const postData = ((request, respose, next) => {
 if (request.method === 'POST') {
     console.log(`Body: ${JSON.stringify(request.body)}`)
@@ -22,12 +10,12 @@ if (request.method === 'POST') {
 next()
 })
 
+app.use(express.static('dist'))
 app.use(bodyParser.json())
 app.use(morgan('tiny'))
 app.use(express.json())
 app.use(postData)
 
-//app.use(requestLogger)
 
 let persons = [
     { 
@@ -82,7 +70,9 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 const generateId = () => {
-    return Date.now().toString(36) + Math.random().toString(36).substring(2)
+  return Math.floor(Math.random() * 1000000)
+
+    //return Date.now().toString(36) + Math.random().toString(36).substring(2)
   };
 
 app.post('/api/persons', (request, response) => {
@@ -109,9 +99,7 @@ app.post('/api/persons', (request, response) => {
   response.json(person)
 })
 
-//app.use(unknownEndpoint)
-
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
