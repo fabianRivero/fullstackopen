@@ -65,6 +65,10 @@ const App = () => {
         }, 5000)
         setNewName('')
         setNewNumber('')
+        setErrorMessage(null)
+      })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
       })
     } else {
       if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
@@ -73,11 +77,13 @@ const App = () => {
         setConfirmationMessage(
           `'${person.name}' updated`
         )
+        window.location.reload();
         setTimeout(() => {
           setConfirmationMessage(null)
         }, 5000)
         setNewName('')
         setNewNumber('')
+        setErrorMessage(null)
       } 
     }
   }
@@ -102,6 +108,7 @@ const App = () => {
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
+      setConfirmationMessage(null)
     })
   }
 
