@@ -1,17 +1,11 @@
 const mongoose = require('mongoose')
+const config = require('../utils/config')
 
 mongoose.set('strictQuery', false)
 
-const url = process.env.MONGODB_URI
+const url = config.MONGODB_URI
 
-console.log('connecting to', url)
 mongoose.connect(url)
-  .then(result => {
-    console.log('connected to MongoDB', result)
-  })
-  .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
 
 const noteSchema = new mongoose.Schema({
   content: {
@@ -20,6 +14,10 @@ const noteSchema = new mongoose.Schema({
     required: true
   },
   important: Boolean,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
 })
 
 noteSchema.set('toJSON', {

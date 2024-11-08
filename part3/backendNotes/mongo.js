@@ -7,7 +7,7 @@ if (process.argv.length<3) {
 
 const password = process.argv[2]
 
-const url = `mongodb+srv://fabianRivero:${password}@cluster0.xroqi.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
+const url = `mongodb+srv://fabianRivero:${password}@cluster0.xroqi.mongodb.net/noteTest?retryWrites=true&w=majority&appName=Cluster0`
 
 
 mongoose.set('strictQuery',false)
@@ -22,14 +22,13 @@ const noteSchema = new mongoose.Schema({
 const Note = mongoose.model('Note', noteSchema)
 
 const note = new Note({
-  content: 'HTML is easy',
-  important: true,
+  content: 'content 2',
+  important: false,
 })
 
 note.save().then(result => {
   console.log(result)
   console.log('note saved!')
-  mongoose.connection.close()
 })
 
 Note.find({}).then(result => {
