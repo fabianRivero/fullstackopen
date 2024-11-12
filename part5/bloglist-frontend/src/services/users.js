@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/blogs'
+const baseUrl = '/api/users'
 
 let token = null
 
@@ -12,10 +12,10 @@ const getAll = async() => {
   return request.data
 }
 
-const getSpecificBlog = async(id) => {
-  const request = await axios.get(`${baseUrl}/${id}`)
-  return request.data
-}
+const getSpecificUser = async(id) => {
+    const request = await axios.get(`${baseUrl}/${id}`)
+    return request.data
+  }
 
 const createNewBlog = async newObject => {
   const config = {
@@ -27,13 +27,11 @@ const createNewBlog = async newObject => {
 }
 
 const updateBlog = async (id, newObject) => {
-
   const config = {
     headers: { Authorization: token },
   }
-
   const request = await axios.put(`${baseUrl}/${id}`, newObject, config, { new: true })
   return request.data
 }
 
-export default { getAll, getSpecificBlog, createNewBlog, updateBlog, setToken }
+export default { getAll, getSpecificUser, createNewBlog, updateBlog, setToken }

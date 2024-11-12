@@ -8,12 +8,20 @@ usersRouter.get('/', async (request, response) => {
     response.json(users)
   })
 
+  usersRouter.get('/:id', async (request, response) => {
+    const user = await User.findById(request.params.id)
+    console.log("el user en controlers", user)
+    if (user) {
+      response.json(user)
+    } else {
+      response.status(404).end()
+    }
+  })
+
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
   const saltRounds = 10
-
-  // const passwordHash = await bcrypt.hash(password, saltRounds)
 
   const passwordHash = password.length >=3 
   ?
