@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react"
-import blogService from "../services/blogs"
 
-const Blog = ({ blog, user, func }) => {
+const Blog = ({ blog, user, likeFunction, removeFunction }) => {
   const [visible, setVisible] = useState(false)
-  const [bottomLabel, setBottomLabel] = useState("view")
+  const [buttonLabel, setButtonLabel] = useState("view")
   const [likes, setLikes] = useState(null)
 
   useEffect(() => {
@@ -24,28 +23,38 @@ const Blog = ({ blog, user, func }) => {
 
   const showWhenVisible = { display: visible ? '' : 'none' }
 
-  const toggleVisibility = () => {
+  const toggleVisibility = async () => {
     setVisible(!visible)
     const label = visible ?
     "view":
     "hide"
-    setBottomLabel(label)
+    setButtonLabel(label)  
   }
 
+  const removeButtonStyle = blog.user.username === user.username
+  ?
+  {display:""}
+  :
+  {display:"none"}
+
   const giveLike = async () => {
-    func(blog, likes)
+    await likeFunction(blog, likes)
     setLikes(likes + 1)
+  }
+  const removeBlog = async () => {
+    await removeFunction(blog)
   }
 
   return(
   <div style={blogStyle}>
     <div>
-    {blog.title} {blog.author} <button onClick={toggleVisibility}>{bottomLabel}</button>
+    {blog.title} {blog.author} <button onClick={toggleVisibility}>{buttonLabel}</button>
     </div>
     <div style={showWhenVisible}>
       <div>{blog.url}</div>
       <div>Likes:{likes}<button onClick={giveLike}>Like</button></div>
       <div>{user.name}</div>
+      <button style={removeButtonStyle} onClick={removeBlog}>remove</button>
     </div>
   </div>
   )

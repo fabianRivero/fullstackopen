@@ -48,6 +48,8 @@ blogsRouter.get('/', async(request, response) => {
     if(userBlogs.includes(request.params.id)){
       await Blog.findByIdAndDelete(request.params.id)
       response.status(204).end()
+    }else {
+      response.status(404).end()
     }
   })
   

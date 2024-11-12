@@ -67,14 +67,8 @@ const App = () => {
         }
     }
 
-    const addBlog = async(event) => {
-      event.preventDefault()
+    const addBlog = async(blogObject) => {
       if (window.localStorage.getItem('loggedBlogappUser')) {
-        const blogObject = {
-          title: title,
-          author: author,
-          url: url,
-        }
         const returnedBlog = await blogService.createNewBlog(blogObject)
         setBlogs(blogs.concat(returnedBlog))
         setNotification(`A new blog "${blogObject.title}" by ${blogObject.author} added.`)
@@ -103,6 +97,18 @@ const App = () => {
       setBlogs( sortedBlogs ) 
     }
     
+    const removeBLog = async (blog) => {
+      const confirmacion = window.confirm(`Remove blog: ${blog.title} by ${blog.author}?`)
+      if (confirmacion) {
+        await blogService.deleteBlog(blog.id)
+        const newBlogs = await blogService.getAll()
+        const sortedBlogs = await newBlogs.sort((a, b) => b.likes - a.likes)
+        setBlogs( sortedBlogs )
+      } else {
+        return null 
+      }
+
+    } 
 
   return (
     <>
@@ -123,10 +129,9 @@ const App = () => {
         </div>
         
       </div>
-      {/* <BlogList props={blogs} ref={blogListRef}/> */}
         {
         blogs.map(blog => blog)
-        .map((blog) => <Blog key={blog.id} blog={blog} user={user} func={giveLike} />)
+        .map((blog) => <Blog key={blog.id} blog={blog} user={user} likeFunction={giveLike} removeFunction={removeBLog}/>)
         }
       </div>
       :

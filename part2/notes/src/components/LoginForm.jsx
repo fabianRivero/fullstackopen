@@ -13,7 +13,6 @@ const LoginForm = ({ login }) => {
     setUsername('')
     setPassword('')
   }
-
   return (
     <div>
       <h2>Login</h2>
@@ -37,7 +36,6 @@ const LoginForm = ({ login }) => {
         <button type="submit">login</button>
       </form>
     </div>
-  )
-}
+  )}
 
 export default LoginForm
