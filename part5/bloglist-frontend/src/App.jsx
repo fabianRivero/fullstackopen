@@ -129,10 +129,12 @@ const App = () => {
         </div>
         
       </div>
+        <ul>
         {
         blogs.map(blog => blog)
         .map((blog) => <Blog key={blog.id} blog={blog} user={user} likeFunction={giveLike} removeFunction={removeBLog}/>)
         }
+        </ul>
       </div>
       :
       <div>
@@ -141,6 +143,7 @@ const App = () => {
         <div>
           username
             <input
+            data-testid='username'
             type="text"
             value={username}
             name="Username"
@@ -150,6 +153,7 @@ const App = () => {
           <div>
           password
             <input
+            data-testid='password'
             type="password"
             value={password}
             name="Password"

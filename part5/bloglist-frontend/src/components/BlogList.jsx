@@ -1,9 +1,6 @@
-import { useState, forwardRef, useImperativeHandle } from 'react'
 import Blog from './Blog'
 
-const BlogList = ((props, refs) => {
-    console.log("props", props)
-    console.log("refs", refs)
+const BlogList = ((props) => {
 
     return(
         props.blogs.map(blog => blog).sort((a, b) => b.likes - a.likes)

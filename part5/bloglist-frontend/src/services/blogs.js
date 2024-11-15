@@ -37,7 +37,6 @@ const updateBlog = async (id, newObject) => {
 }
 
 const deleteBlog = async (id) => {
-
   const config = {
     headers: { Authorization: token },
   }
